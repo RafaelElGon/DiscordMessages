@@ -1,5 +1,5 @@
 # Discord Channel Message Scraping
->Este projeto é uma ferramenta para recuperar o histórico de mensagens de um canal específico no Discord, utilizando a API do Discord. O objetivo é a preservação do conteúdo de mensagens dos canais de um servidor. 
+>Este projeto é uma ferramenta para recuperar o histórico de mensagens de um canal específico no Discord, utilizando a API do mesmo. O objetivo é a preservação do conteúdo de mensagens dos canais de um servidor. 
 
 ## Atualmente, o projeto permite:
 
