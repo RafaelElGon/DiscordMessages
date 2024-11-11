@@ -1,0 +1,43 @@
+import requests
+import json
+
+def retrieve_messages(channelid, auth_token, output_file='messages.json'):
+    url = f'https://discord.com/api/v9/channels/{channelid}/messages?limit=100'
+
+    headers = {
+        'authorization': f'Bot {auth_token}'
+    }
+    
+    all_messages = []
+    last_message_id = None
+
+    while True:
+        
+        if last_message_id is not None:
+            url += f'&before={last_message_id}'
+            
+        response = requests.get(url, headers=headers)
+
+        if response.status_code != 200:
+            print(f"Message retrieval failed: {response.status_code}")
+            break
+        
+        messages = json.loads(response.text)
+
+        if not messages:
+            print("No messages to retrieve")
+            break
+        
+        all_messages.extend(messages)
+        last_message_id = messages[-1]['id']
+        
+        #time.sleep(1)
+        
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(all_messages, f, ensure_ascii=False, indent=4)
+        
+        print(f'Total messages retrieved: {len(all_messages)} and saved to {output_file}')
+        return all_messages
+    
+
+retrieve_messages('CHANNEL_ID', 'BOT_TOKEN')
