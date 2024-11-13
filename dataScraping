@@ -1,7 +1,10 @@
 import requests
 import json
+import time
+import config
 
 def retrieve_messages(channelid, user_id, auth_token, output_file='messages.json'):
+    
     url = f'https://discord.com/api/v9/channels/{channelid}/messages?limit=100'
 
     headers = {
@@ -13,13 +16,19 @@ def retrieve_messages(channelid, user_id, auth_token, output_file='messages.json
 
     while True:
         
-        if last_message_id is not None:
-            url += f'&before={last_message_id}'
+        current_url = f'{url}&before={last_message_id}' if last_message_id else url # attempt at handling improper url formation 
             
-        response = requests.get(url, headers=headers)
+        response = requests.get(current_url, headers=headers)
+        
+        if response.status_code == 429: # handling the exceeding of api requests limit
+            retry_after = int(response.headers.get("Retry-After", 1))
+            print(f"Rate limit exceeded. Retrying after {retry_after} seconds")
+            time.sleep(retry_after)
+            continue
 
-        if response.status_code != 200:
+        if response.status_code != 200: # handling errors in general
             print(f"Message retrieval failed: {response.status_code}")
+            print(f'Last requested url: {current_url}')
             break
         
         messages = json.loads(response.text)
@@ -28,17 +37,23 @@ def retrieve_messages(channelid, user_id, auth_token, output_file='messages.json
             print("No messages to retrieve")
             break
         
-        user_messages = [msg for msg in messages if msg['author']['id'] == user_id]
-        all_messages.extend(user_messages)
+        #user_messages = [msg for msg in messages if msg['author']['id'] == user_id] // old way of getting messages, without user filtering 
+        for msg in messages:
+            if msg['author']['id'] == user_id:
+                content = msg['content']
+                if 'https://www.youtube.com' in content or 'https://open.spotify.com' in content:
+                    all_messages.append(msg)
+                
+        #all_messages.extend(user_messages) // old way of getting messages, without user filtering 
         last_message_id = messages[-1]['id']
         
-        #time.sleep(1)
+        #time.sleep(0.5) //optional wait time, already handled at lines 21 through 25 
         
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(all_messages, f, ensure_ascii=False, indent=4)
+    with open(output_file, 'w', encoding='utf-8') as f: # saving the messages retrieved in messages.json
+        json.dump(all_messages, f, ensure_ascii=False, indent=4)
         
-        print(f'Total messages retrieved: {len(all_messages)} and saved to {output_file}')
-        return all_messages
+    print(f'Total messages retrieved: {len(all_messages)} and saved to {output_file}')
+    return all_messages
     
 
-retrieve_messages('CHANNEL_ID', 'USER_ID', 'BOT_TOKEN')
+retrieve_messages(config.CHANNEL_ID, config.USER_ID, config.BOT_TOKEN)
