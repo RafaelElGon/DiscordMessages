@@ -1,7 +1,7 @@
 import requests
 import json
 
-def retrieve_messages(channelid, auth_token, output_file='messages.json'):
+def retrieve_messages(channelid, user_id, auth_token, output_file='messages.json'):
     url = f'https://discord.com/api/v9/channels/{channelid}/messages?limit=100'
 
     headers = {
@@ -28,7 +28,8 @@ def retrieve_messages(channelid, auth_token, output_file='messages.json'):
             print("No messages to retrieve")
             break
         
-        all_messages.extend(messages)
+        user_messages = [msg for msg in messages if msg['author']['id'] == user_id]
+        all_messages.extend(user_messages)
         last_message_id = messages[-1]['id']
         
         #time.sleep(1)
@@ -40,4 +41,4 @@ def retrieve_messages(channelid, auth_token, output_file='messages.json'):
         return all_messages
     
 
-retrieve_messages('CHANNEL_ID', 'BOT_TOKEN')
+retrieve_messages('CHANNEL_ID', 'USER_ID', 'BOT_TOKEN')
