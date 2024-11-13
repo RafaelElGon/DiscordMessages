@@ -9,4 +9,4 @@
 ## Objetivos futuros:
 
 - ~~Permitir que o conteúdo das mensagens seja recuperado. Por enquanto, somente metadados sobre as mensagens estão disponíveis.~~
-- Filtrar as mensagens por usuário.
+- ~~Filtrar as mensagens por usuário.~~
