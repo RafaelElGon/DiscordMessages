@@ -34,7 +34,7 @@
 - ~~Retrieve the content of messages. As of now, only metadata about the messages are retrieved.~~
 - ~~Filter message collection by user ID.~~
 
-- Implementing an interface to use the bot via text messages, so that more people can use it more easily.
+- Implementing an interface to use the bot via Discord DM, so that more people can use it more easily.
   - With this, also comes creating DM support so that the .json file can get sent via Discord DM to the user that requested it.
 - Implement an option to collect all messages from a channel, with no user filtering.
   - Maybe add different filtering methods.
