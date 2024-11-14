@@ -1,0 +1,25 @@
+import json
+import re
+
+def link_extraction(input_file='../messages.json', output_file='../LinkExtraction/links.txt'):
+    
+    url_pattern = re.compile(r'https?://[^\s]+') # regex to find all matching url in the content field from messages.json
+    
+    links = []
+    
+    with open(input_file, 'r', encoding='utf-8') as f:
+        messages = json.load(f)
+    
+    for message in messages:
+        content = message.get('content', '') # content field in messages.json
+        
+        links.extend(url_pattern.findall(content))
+        
+    with open(output_file, 'w', encoding='utf-8') as f:
+        for link in links:
+            f.write(link + '\n')
+    
+    print(f'Extracted {len(links)} links and saved to {output_file}')
+    
+
+link_extraction()
