@@ -1,5 +1,0 @@
-# config.py
-
-BOT_TOKEN = 'BOT_TOKEN'
-CHANNEL_ID = 'CHANNEL_ID'
-USER_ID = 'USER_ID'
