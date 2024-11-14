@@ -13,6 +13,8 @@
 
 - Implementar uma interface via DM de Discord, para que mais pessoas possam usar de forma mais fácil.
   - Junto dessa possível implementação, entra também adicionar suporte pra enviar o arquivo .json via DM de Discord pra quem requisitou as mensagens.
+- Implementar a possibilidade de recuperar todas mensagens de um canal, sem um filtro de usuário.
+  - Talvez adicionar métodos de filtragem diferentes. 
  
 ## Créditos:
 
@@ -34,6 +36,8 @@
 
 - Implementing an interface to use the bot via text messages, so that more people can use it more easily.
   - With this, also comes creating DM support so that the .json file can get sent via Discord DM to the user that requested it.
+- Implement an option to collect all messages from a channel, with no user filtering.
+  - Maybe add different filtering methods.
  
 ## Credits:
 
