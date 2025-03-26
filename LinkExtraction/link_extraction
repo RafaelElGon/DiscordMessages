@@ -5,7 +5,7 @@ def link_extraction(input_file='../messages.json', output_file='../LinkExtractio
     
     url_pattern = re.compile(r'https?://[^\s]+') # regex to find all matching url in the content field from messages.json
     
-    links = []
+    songs = []
     
     with open(input_file, 'r', encoding='utf-8') as f:
         messages = json.load(f)
@@ -13,13 +13,33 @@ def link_extraction(input_file='../messages.json', output_file='../LinkExtractio
     for message in messages:
         content = message.get('content', '') # content field in messages.json
         
-        links.extend(url_pattern.findall(content))
+        links = url_pattern.findall(content)
+        
+        title = "Unknown Title"
+        artist = "Unknown Artist"
+        
+
+                
+        if 'embeds' in message and message['embeds']:
+            embed = message['embeds'][0]
+            title = embed.get('title', 'Unknown Title')
+            description = embed.get('description', '')
+                    
+            if ' · ' in description:
+                artist = description.split(' · ')[0] 
+                
+            for link in links:
+                if 'open.spotify.com' in link:        
+                    songs.append(f'{title} - {artist} \n {link} \n')
+                else:
+                    songs.append(f'{title} \n {link} \n')
+                    
         
     with open(output_file, 'w', encoding='utf-8') as f:
-        for link in links:
-            f.write(link + '\n')
+        for song in songs:
+            f.write(song + '\n')
     
-    print(f'Extracted {len(links)} links and saved to {output_file}')
+    print(f'Extracted {len(songs)} links and saved to {output_file}')
     
 
 link_extraction()
